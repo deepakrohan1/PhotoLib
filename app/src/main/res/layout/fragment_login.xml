@@ -1,0 +1,74 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.rohan.photolib.LoginFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <RelativeLayout
+        android:id="@+id/loginFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/buttonLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="@string/login_button" />
+
+        <Button
+            android:id="@+id/buttonSignup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/buttonLogin"
+            android:layout_below="@+id/buttonLogin"
+            android:text="@string/signup_button" />
+
+        <EditText
+            android:id="@+id/editTextUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="42dp"
+            android:hint="@string/username_login" />
+
+        <EditText
+            android:id="@+id/editTexPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/editTextUsername"
+            android:layout_centerHorizontal="true"
+            android:inputType="textPassword"
+            android:hint="@string/password_login" />
+
+        <ImageView
+            android:id="@+id/imageViewFacebook"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="53dp"
+            android:src="@drawable/facebook" />
+
+        <ImageView
+            android:id="@+id/imageViewTwitter"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignBottom="@+id/imageViewFacebook"
+            android:layout_marginLeft="5dp"
+            android:layout_toEndOf="@+id/imageViewFacebook"
+            android:src="@drawable/twitter2" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignTop="@+id/imageViewFacebook"
+            android:text="@string/login_using" />
+    </RelativeLayout>
+
+</FrameLayout>

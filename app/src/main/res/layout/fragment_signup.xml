@@ -1,0 +1,68 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" tools:context="com.example.rohan.photolib.SignupFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/signup">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/editTextName"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:hint="@string/name_field"
+            android:layout_marginTop="64dp" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/editTextEmail"
+            android:layout_below="@+id/editTextName"
+            android:hint="@string/username_login"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="92dp" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:ems="10"
+            android:id="@+id/editTextPassword"
+            android:hint="@string/password_login"
+            android:layout_below="@+id/editTextEmail"
+            android:layout_centerHorizontal="true" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:hint="@string/confirm_password"
+            android:ems="10"
+            android:id="@+id/editTextCPassword"
+            android:layout_below="@+id/editTextPassword"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/signup_button"
+            android:id="@+id/buttonSignup"
+            android:layout_below="@+id/editTextCPassword"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="32dp" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel_button"
+            android:id="@+id/buttonCancel"
+            android:layout_below="@+id/buttonSignup"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
+
+</FrameLayout>
