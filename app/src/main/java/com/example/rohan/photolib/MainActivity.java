@@ -91,9 +91,14 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.OnF
     @Override
     public void callSignUp() {
             getFragmentManager().beginTransaction().addToBackStack(null)
-                    .add(R.id.container, new SignupFragment(), "signup").commit();
+                    .replace(R.id.container, new SignupFragment(), "signup").commit();
     }
     /**
-     *
+     * From Signup Fragment
      */
+
+    @Override
+    public void onCancelButton() {
+        getFragmentManager().beginTransaction().replace(R.id.container, new LoginFragment(),"login").commit();
+    }
 }

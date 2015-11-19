@@ -7,6 +7,8 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
 
 /**
@@ -17,6 +19,8 @@ import android.view.ViewGroup;
  */
 public class SignupFragment extends Fragment {
 
+    Button buttonSignup, buttonCancel;
+    EditText editTextName, editTextUsername, editTextPassword, editTextCPassword;
 
     private OnFragmentInteractionListener mListener;
 
@@ -56,6 +60,26 @@ public class SignupFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        initializeUI();
+
+        buttonSignup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        buttonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onCancelButton();
+            }
+        });
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -69,6 +93,16 @@ public class SignupFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction();
+        public void onCancelButton();
+    }
+
+    private void initializeUI() {
+        buttonSignup = (Button) getView().findViewById(R.id.buttonSignup);
+        buttonCancel = (Button) getView().findViewById(R.id.buttonCancel);
+        editTextName = (EditText) getView().findViewById(R.id.editTextName);
+        editTextUsername = (EditText) getView().findViewById(R.id.editTextUsername);
+        editTextPassword = (EditText) getView().findViewById(R.id.editTextPassword);
+        editTextCPassword = (EditText) getView().findViewById(R.id.editTextCPassword);
     }
 
 }
