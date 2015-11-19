@@ -1,14 +1,15 @@
 package com.example.rohan.photolib;
 
 import android.app.Activity;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 
 /**
@@ -21,6 +22,7 @@ public class SignupFragment extends Fragment {
 
     Button buttonSignup, buttonCancel;
     EditText editTextName, editTextUsername, editTextPassword, editTextCPassword;
+    String name = "", username = "", password = "", cPassword="";
 
     private OnFragmentInteractionListener mListener;
 
@@ -68,7 +70,19 @@ public class SignupFragment extends Fragment {
         buttonSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                name = editTextName.getText().toString();
+                username = editTextUsername.getText().toString();
+                password = editTextPassword.getText().toString();
+                cPassword = editTextCPassword.getText().toString();
 
+                Log.d("signup", "name--" + name + "--username--" + username + "--password--" + password + "--cPass--" + cPassword);
+                if (isValid(name, username, password, cPassword)) {
+
+                    //TODO check for user existance on the server
+
+                } else {
+                    Log.d("signupErr", "Check for the Error");
+                }
             }
         });
 
@@ -99,10 +113,23 @@ public class SignupFragment extends Fragment {
     private void initializeUI() {
         buttonSignup = (Button) getView().findViewById(R.id.buttonSignup);
         buttonCancel = (Button) getView().findViewById(R.id.buttonCancel);
-        editTextName = (EditText) getView().findViewById(R.id.editTextName);
+        editTextName = (EditText) getView().findViewById(R.id.editTextUsername);
         editTextUsername = (EditText) getView().findViewById(R.id.editTextUsername);
         editTextPassword = (EditText) getView().findViewById(R.id.editTextPassword);
         editTextCPassword = (EditText) getView().findViewById(R.id.editTextCPassword);
+    }
+
+    public boolean isValid(String name, String username, String password, String cPassword){
+
+        if(name.trim().equals("") || username.trim().equals("") || password.trim().equals("") || cPassword.trim().equals("")){
+            Toast.makeText(getActivity(),"Don't leave the fields Empty", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(!password.trim().equals(cPassword.trim())){
+            Toast.makeText(getActivity(),"The passwords don't match", Toast.LENGTH_SHORT).show();
+            return false;
+        }else {
+            return true;
+        }
     }
 
 }
