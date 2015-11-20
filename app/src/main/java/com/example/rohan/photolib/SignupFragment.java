@@ -11,6 +11,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
+
+import java.util.List;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -79,6 +86,12 @@ public class SignupFragment extends Fragment {
                 if (isValid(name, username, password, cPassword)) {
 
                     //TODO check for user existance on the server
+                    if (checkExistance(username)) {
+                        Toast.makeText(getActivity(),"The username" +username+ " is already taken up.", Toast.LENGTH_SHORT).show();
+
+                    } else {
+//                        TODO implement Signup
+                    }
 
                 } else {
                     Log.d("signupErr", "Check for the Error");
@@ -113,7 +126,7 @@ public class SignupFragment extends Fragment {
     private void initializeUI() {
         buttonSignup = (Button) getView().findViewById(R.id.buttonSignup);
         buttonCancel = (Button) getView().findViewById(R.id.buttonCancel);
-        editTextName = (EditText) getView().findViewById(R.id.editTextUsername);
+        editTextName = (EditText) getView().findViewById(R.id.editTextName);
         editTextUsername = (EditText) getView().findViewById(R.id.editTextUsername);
         editTextPassword = (EditText) getView().findViewById(R.id.editTextPassword);
         editTextCPassword = (EditText) getView().findViewById(R.id.editTextCPassword);
@@ -130,6 +143,31 @@ public class SignupFragment extends Fragment {
         }else {
             return true;
         }
+    }
+
+    public boolean checkExistance(String username){
+        ParseQuery<ParseUser> users = ParseUser.getQuery();
+        users.whereEqualTo("username", username);
+        final boolean[] foundUser = {false};
+        users.findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> objects, ParseException e) {
+                if(e == null){
+                    Log.d("signupGetObj","Found :"+objects.size());
+                    if(objects.size() > 0){
+                         foundUser[0] = true;
+                    }else{
+                        foundUser[0] = false;
+                    }
+                }else{
+                    Log.d("signupGetErr", "Parse error: "+e.toString());
+                }
+            }
+
+        });
+        Log.d("signupUser","User Found "+foundUser[0]);
+
+        return foundUser[0];
     }
 
 }

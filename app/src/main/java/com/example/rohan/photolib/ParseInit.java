@@ -24,8 +24,8 @@ public class ParseInit extends Application {
          */
 
         Parse.initialize(getApplicationContext(), "Bgyv9Ai6dejljuTV1pRvT9AsvRR8HO89ZrfNSJN9", "W7QHGsjlDBywthI4h1c2x99F3Aixxx274qHLWG0R");
-        ParseTwitterUtils.initialize("BT3R1MBXZRgx9TgLqFwDPY8TI", "dCysm1bIurdEHiqCSI1AkyTpx4YhiMOJugiMCxiO60pL6ExWJv");
-        ParseTwitterUtils.getTwitter().getScreenName();
+        ParseTwitterUtils.initialize("bzmEZ1F8m2W67Q3EJ0ql9Pjsy", "QaornL5u67hKFXUVcTadtRHpOdJZf08emJwZjrRMfHllWO6tzp");
+//        ParseTwitterUtils.getTwitter().getScreenName();
 
 
         ParseInstallation.getCurrentInstallation().saveInBackground();

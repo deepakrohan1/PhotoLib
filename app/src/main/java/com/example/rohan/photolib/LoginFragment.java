@@ -1,7 +1,6 @@
 package com.example.rohan.photolib;
 
 import android.app.Activity;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
@@ -12,6 +11,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.parse.LogInCallback;
+import com.parse.ParseException;
+import com.parse.ParseTwitterUtils;
+import com.parse.ParseUser;
 
 
 /**
@@ -26,7 +30,8 @@ public class LoginFragment extends Fragment {
     EditText editTextUsername, editTextPassword;
     Button buttonLogin, buttonSignup;
     ImageView imageViewFacebook, imageViewTwitter;
-    String username = "", password="";
+    String username = "", password = "";
+
     public LoginFragment() {
         // Required empty public constructor
     }
@@ -83,6 +88,32 @@ public class LoginFragment extends Fragment {
             }
         });
 
+        imageViewTwitter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /**
+                 * Twitter Login
+                 */
+
+                ParseTwitterUtils.logIn(getActivity(), new LogInCallback() {
+                    @Override
+                    public void done(ParseUser user, ParseException err) {
+                        if (user == null) {
+                            Log.d("loginTw", "Uh oh. The user cancelled the Twitter login.");
+                        } else if (user.isNew()) {
+                            Log.d("loginTw", "User signed up and logged in through Twitter!");
+//                    Log.d("loginTw", ParseTwitterUtils.getTwitter().getScreenName().toString());
+
+                        } else {
+                            Log.d("loginTw", "User logged in through Twitter!");
+                            Log.d("loginTw", ParseTwitterUtils.getTwitter().getScreenName().toString());
+
+                        }
+                    }
+                });
+            }
+        });
+
 
     }
 
@@ -97,7 +128,7 @@ public class LoginFragment extends Fragment {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p/>
+     * <p>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
@@ -105,30 +136,31 @@ public class LoginFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction();
+
         public void callSignUp();
     }
 
     /**
      * Intializations
      */
-    public void intializeUI(){
+    public void intializeUI() {
         buttonLogin = (Button) getView().findViewById(R.id.buttonLogin);
         buttonSignup = (Button) getView().findViewById(R.id.buttonSignup);
 
-        editTextUsername = (EditText)getView().findViewById(R.id.editTextUsername);
-        editTextPassword = (EditText)getView().findViewById(R.id.editTexPassword);
+        editTextUsername = (EditText) getView().findViewById(R.id.editTextName);
+        editTextPassword = (EditText) getView().findViewById(R.id.editTexPassword);
 
-        imageViewFacebook = (ImageView)getView().findViewById(R.id.imageViewFacebook);
-        imageViewTwitter = (ImageView)getView().findViewById(R.id.imageViewTwitter);
+        imageViewFacebook = (ImageView) getView().findViewById(R.id.imageViewFacebook);
+        imageViewTwitter = (ImageView) getView().findViewById(R.id.imageViewTwitter);
     }
 
-    public boolean isValidCreds(String username, String password){
+    public boolean isValidCreds(String username, String password) {
 
-        if(username.trim().equals("") || password.trim().equals("")){
-            Toast.makeText(getActivity(),"Enter the User Credentials",Toast.LENGTH_SHORT).show();
+        if (username.trim().equals("") || password.trim().equals("")) {
+            Toast.makeText(getActivity(), "Enter the User Credentials", Toast.LENGTH_SHORT).show();
             return false;
 //            TODO: ADD else if to check for email
-        }else{
+        } else {
             return true;
         }
     }
