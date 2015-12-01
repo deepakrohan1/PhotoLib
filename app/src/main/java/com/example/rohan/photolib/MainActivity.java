@@ -1,5 +1,7 @@
 package com.example.rohan.photolib;
 
+import android.app.Fragment;
+import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +11,7 @@ import android.view.MenuItem;
 
 import com.parse.LogInCallback;
 import com.parse.ParseException;
+import com.parse.ParseFacebookUtils;
 import com.parse.ParseInstallation;
 import com.parse.ParsePush;
 import com.parse.ParseTwitterUtils;
@@ -85,5 +88,14 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.OnF
     @Override
     public void onCancelButton() {
         getFragmentManager().beginTransaction().replace(R.id.container, new LoginFragment(),"login").commit();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d("loginFBOnAct","Code reaches here");
+        ParseFacebookUtils.onActivityResult(requestCode, resultCode, data);
+//        android.support.v4.app.Fragment fragment = getSupportFragmentManager().findFragmentByTag("login");
+//        fragment.onActivityResult(requestCode,resultCode,data);
     }
 }

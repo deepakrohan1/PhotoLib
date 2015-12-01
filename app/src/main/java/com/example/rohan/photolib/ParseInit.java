@@ -40,7 +40,7 @@ public class ParseInit extends Application {
         /**
          * FB
          */
-        ParseFacebookUtils.initialize(getApplicationContext());
+        ParseFacebookUtils.initialize(this); //Need to this to get things to work
         Log.d("parseinit", getApplicationContext().toString());
         printHaskKey();
     }

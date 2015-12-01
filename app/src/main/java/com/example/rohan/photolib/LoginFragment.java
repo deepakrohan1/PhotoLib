@@ -139,15 +139,16 @@ public class LoginFragment extends Fragment {
                             public void done(ParseUser user, ParseException err) {
                                 Log.d("loginFB", "Testing FB login");
                                 if (err != null) {
-                                    Log.d("loginFB", err.toString());
+                                    Log.d("loginFB","This is an error: "+ err.toString());
                                 }
                                 if (user == null) {
                                     Log.d("loginFB", "Uh oh. The user cancelled the Facebook login.");
                                 } else if (user.isNew()) {
-                                    Log.d("loginFB", "User signed up and logged in through Facebook!");
+                                    Log.d("loginFB", "User signed up and logged in through Facebook!"+ParseUser.getCurrentUser());
+
 //                                    saveUserDetails();
                                 } else {
-                                    Log.d("loginFB", "User logged in through Facebook!");
+                                    Log.d("loginFB", "User logged in through Facebook!" +ParseUser.getCurrentUser().get);
 //                                    saveUserDetails();
                                 }
 
@@ -213,9 +214,10 @@ public class LoginFragment extends Fragment {
      * @param resultCode
      * @param data
      */
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        ParseFacebookUtils.onActivityResult(requestCode, resultCode, data);
-    }
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+////        Log.d("loginFBOnAct","Code reaches here");
+////        ParseFacebookUtils.onActivityResult(requestCode, resultCode, data);
+//    }
 }
