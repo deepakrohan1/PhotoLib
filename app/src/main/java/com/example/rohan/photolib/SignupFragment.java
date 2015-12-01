@@ -12,9 +12,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SignUpCallback;
 
 import java.util.List;
 
@@ -85,13 +87,38 @@ public class SignupFragment extends Fragment {
                 Log.d("signup", "name--" + name + "--username--" + username + "--password--" + password + "--cPass--" + cPassword);
                 if (isValid(name, username, password, cPassword)) {
 
-                    //TODO check for user existance on the server
-                    if (checkExistance(username)) {
-                        Toast.makeText(getActivity(),"The username" +username+ " is already taken up.", Toast.LENGTH_SHORT).show();
+                    //TODO Implementation of Signup
+                    final ParseQuery<ParseUser> user = ParseUser.getQuery();
+                    user.whereEqualTo("username", username);
+                    user.findInBackground(new FindCallback<ParseUser>() {
+                        @Override
+                        public void done(List<ParseUser> objects, ParseException e) {
+                            if (e == null) {
+                                if (objects.size() > 0) {
+                                    Toast.makeText(getActivity(), "The username has been taken " + username
+                                            + " ,choose another", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    ParseUser createUser = new ParseUser();
+                                    createUser.setUsername(username);
+                                    createUser.setPassword(password);
+                                    createUser.setEmail(username);
+                                    createUser.put("name", name);
+                                    createUser.signUpInBackground(new SignUpCallback() {
+                                        @Override
+                                        public void done(ParseException e) {
+                                            if (e == null) {
+                                                Toast.makeText(getActivity(),"New user has been created", Toast.LENGTH_SHORT).show();
+                                                mListener.onCancelButton();
+                                            }else{
+                                                Log.d("signupErr", "Err Signnup Act: " +e.toString());
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    });
 
-                    } else {
-//                        TODO implement Signup
-                    }
 
                 } else {
                     Log.d("signupErr", "Check for the Error");
@@ -143,31 +170,6 @@ public class SignupFragment extends Fragment {
         }else {
             return true;
         }
-    }
-
-    public boolean checkExistance(String username){
-        ParseQuery<ParseUser> users = ParseUser.getQuery();
-        users.whereEqualTo("username", username);
-        final boolean[] foundUser = {false};
-        users.findInBackground(new FindCallback<ParseUser>() {
-            @Override
-            public void done(List<ParseUser> objects, ParseException e) {
-                if(e == null){
-                    Log.d("signupGetObj","Found :"+objects.size());
-                    if(objects.size() > 0){
-                         foundUser[0] = true;
-                    }else{
-                        foundUser[0] = false;
-                    }
-                }else{
-                    Log.d("signupGetErr", "Parse error: "+e.toString());
-                }
-            }
-
-        });
-        Log.d("signupUser","User Found "+foundUser[0]);
-
-        return foundUser[0];
     }
 
 }

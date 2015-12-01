@@ -1,6 +1,7 @@
 package com.example.rohan.photolib;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
@@ -14,8 +15,12 @@ import android.widget.Toast;
 
 import com.parse.LogInCallback;
 import com.parse.ParseException;
+import com.parse.ParseFacebookUtils;
 import com.parse.ParseTwitterUtils;
 import com.parse.ParseUser;
+
+import java.util.Arrays;
+import java.util.List;
 
 
 /**
@@ -31,6 +36,8 @@ public class LoginFragment extends Fragment {
     Button buttonLogin, buttonSignup;
     ImageView imageViewFacebook, imageViewTwitter;
     String username = "", password = "";
+    List<String> permissions;
+
 
     public LoginFragment() {
         // Required empty public constructor
@@ -66,6 +73,7 @@ public class LoginFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         intializeUI();
+        ParseUser.logOut(); //TODo remvove this at the end
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,12 +96,14 @@ public class LoginFragment extends Fragment {
             }
         });
 
+        /**
+         * Twitter Login
+         */
+
         imageViewTwitter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /**
-                 * Twitter Login
-                 */
+
 
                 ParseTwitterUtils.logIn(getActivity(), new LogInCallback() {
                     @Override
@@ -114,7 +124,38 @@ public class LoginFragment extends Fragment {
             }
         });
 
+        /**
+         * FB Auth
+         */
 
+        imageViewFacebook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("loginFB","Inside Button Click");
+                ParseFacebookUtils.logInWithReadPermissionsInBackground(getActivity(),
+                        permissions = Arrays.asList("public_profile", "email"),
+                        new LogInCallback() {
+                            @Override
+                            public void done(ParseUser user, ParseException err) {
+                                Log.d("loginFB", "Testing FB login");
+                                if (err != null) {
+                                    Log.d("loginFB", err.toString());
+                                }
+                                if (user == null) {
+                                    Log.d("loginFB", "Uh oh. The user cancelled the Facebook login.");
+                                } else if (user.isNew()) {
+                                    Log.d("loginFB", "User signed up and logged in through Facebook!");
+//                                    saveUserDetails();
+                                } else {
+                                    Log.d("loginFB", "User logged in through Facebook!");
+//                                    saveUserDetails();
+                                }
+
+                            }
+                        });
+
+            }
+        });
     }
 
     @Override
@@ -128,7 +169,7 @@ public class LoginFragment extends Fragment {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p>
+     * <p/>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
@@ -163,5 +204,18 @@ public class LoginFragment extends Fragment {
         } else {
             return true;
         }
+    }
+
+    /**
+     * Facebook Authentication On Activity Result
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        ParseFacebookUtils.onActivityResult(requestCode, resultCode, data);
     }
 }
