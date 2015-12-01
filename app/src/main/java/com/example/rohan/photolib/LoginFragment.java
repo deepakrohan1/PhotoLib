@@ -148,7 +148,9 @@ public class LoginFragment extends Fragment {
 
 //                                    saveUserDetails();
                                 } else {
-                                    Log.d("loginFB", "User logged in through Facebook!" +ParseUser.getCurrentUser().get);
+                                    Log.d("loginFB", "User logged in through Facebook!" +ParseUser.getCurrentUser());
+                                    Intent i = new Intent(getActivity(),HomeActivity.class);
+                                    startActivity(i);
 //                                    saveUserDetails();
                                 }
 
