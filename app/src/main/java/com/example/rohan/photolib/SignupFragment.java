@@ -12,13 +12,14 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -30,8 +31,13 @@ import java.util.List;
 public class SignupFragment extends Fragment {
 
     Button buttonSignup, buttonCancel;
-    EditText editTextName, editTextUsername, editTextPassword, editTextCPassword;
-    String name = "", username = "", password = "", cPassword="";
+    EditText editTextName, editTextUsername, editTextPassword, editTextCPassword, editTextEmail;
+    String name = "", username = "", password = "", cPassword = "", email = "";
+    private Pattern pattern; //Get Email Working
+    public Matcher matcher;
+    private static final String EMAIL_PATTERN =
+            "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+                    + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 
     private OnFragmentInteractionListener mListener;
 
@@ -75,7 +81,7 @@ public class SignupFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initializeUI();
-
+        pattern = Pattern.compile(EMAIL_PATTERN);
         buttonSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,9 +89,11 @@ public class SignupFragment extends Fragment {
                 username = editTextUsername.getText().toString();
                 password = editTextPassword.getText().toString();
                 cPassword = editTextCPassword.getText().toString();
+                email = editTextEmail.getText().toString();
 
-                Log.d("signup", "name--" + name + "--username--" + username + "--password--" + password + "--cPass--" + cPassword);
-                if (isValid(name, username, password, cPassword)) {
+                Log.d("signup", "name--" + name + "--username--" + username + "--password--" + password + "--cPass--" + cPassword +
+                        "--emaill--" + email);
+                if (isValid(name, email, username, password, cPassword)) {
 
                     //TODO Implementation of Signup
                     final ParseQuery<ParseUser> user = ParseUser.getQuery();
@@ -101,16 +109,16 @@ public class SignupFragment extends Fragment {
                                     ParseUser createUser = new ParseUser();
                                     createUser.setUsername(username);
                                     createUser.setPassword(password);
-                                    createUser.setEmail(username);
+                                    createUser.setEmail(email);
                                     createUser.put("name", name);
                                     createUser.signUpInBackground(new SignUpCallback() {
                                         @Override
                                         public void done(ParseException e) {
                                             if (e == null) {
-                                                Toast.makeText(getActivity(),"New user has been created", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(getActivity(), "New user has been created", Toast.LENGTH_SHORT).show();
                                                 mListener.onCancelButton();
-                                            }else{
-                                                Log.d("signupErr", "Err Signnup Act: " +e.toString());
+                                            } else {
+                                                Log.d("signupErr", "Err Signnup Act: " + e.toString());
                                             }
                                         }
                                     });
@@ -139,7 +147,7 @@ public class SignupFragment extends Fragment {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p>
+     * <p/>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * Communicating with Other Fragments</a> for more information.
@@ -147,6 +155,7 @@ public class SignupFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction();
+
         public void onCancelButton();
     }
 
@@ -155,19 +164,28 @@ public class SignupFragment extends Fragment {
         buttonCancel = (Button) getView().findViewById(R.id.buttonCancel);
         editTextName = (EditText) getView().findViewById(R.id.editTextName);
         editTextUsername = (EditText) getView().findViewById(R.id.editTextUsername);
+        editTextEmail = (EditText) getView().findViewById(R.id.editTextEmail);
         editTextPassword = (EditText) getView().findViewById(R.id.editTextPassword);
         editTextCPassword = (EditText) getView().findViewById(R.id.editTextCPassword);
     }
 
-    public boolean isValid(String name, String username, String password, String cPassword){
+    public boolean isValid(String name, String email, String username, String password, String cPassword) {
+        matcher = pattern.matcher(email);
 
-        if(name.trim().equals("") || username.trim().equals("") || password.trim().equals("") || cPassword.trim().equals("")){
-            Toast.makeText(getActivity(),"Don't leave the fields Empty", Toast.LENGTH_SHORT).show();
+        if (name.trim().equals("") || username.trim().equals("") || email.trim().equals("") ||
+                password.trim().equals("") || cPassword.trim().equals("")) {
+            Toast.makeText(getActivity(), "Don't leave the fields Empty", Toast.LENGTH_SHORT).show();
             return false;
-        }else if(!password.trim().equals(cPassword.trim())){
-            Toast.makeText(getActivity(),"The passwords don't match", Toast.LENGTH_SHORT).show();
+        } else if (username.contains(" ")) {
+            Toast.makeText(getActivity(), "No space in username field", Toast.LENGTH_SHORT).show();
             return false;
-        }else {
+        } else if (!password.trim().equals(cPassword.trim())) {
+            Toast.makeText(getActivity(), "The passwords don't match", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (!matcher.matches()) {
+            Toast.makeText(getActivity(), "Enter a valid Email", Toast.LENGTH_SHORT).show();
+            return false;
+        } else {
             return true;
         }
     }

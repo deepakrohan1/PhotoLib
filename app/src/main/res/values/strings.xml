@@ -13,6 +13,7 @@
 
     <!-- Edit Text Field and Values -->
     <string name="username_login">Enter the Username</string>
+    <string name="email_login">Enter the Email</string>
     <string name="password_login">Enter the Password</string>
 
     <string name="confirm_password">Confirm Password</string>
