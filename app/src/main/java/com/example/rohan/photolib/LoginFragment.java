@@ -13,14 +13,24 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
+import com.facebook.Profile;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseTwitterUtils;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
+
+import org.json.JSONException;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -37,6 +47,12 @@ public class LoginFragment extends Fragment {
     ImageView imageViewFacebook, imageViewTwitter;
     String username = "", password = "";
     List<String> permissions;
+    String email, name;
+    ParseUser parseUser;
+
+    //    private Pattern pattern; //Get Email Working
+//    public Matcher matcher;
+    User user = new User();
 
 
     public LoginFragment() {
@@ -73,6 +89,8 @@ public class LoginFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         intializeUI();
+//        pattern = Pattern.compile(SignupFragment.EMAIL_PATTERN);
+
         ParseUser.logOut(); //TODo remvove this at the end
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,7 +149,9 @@ public class LoginFragment extends Fragment {
         imageViewFacebook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("loginFB","Inside Button Click");
+                Log.d("loginFB", "Inside Button Click");
+//                matcher = pattern.matcher(email);
+
                 ParseFacebookUtils.logInWithReadPermissionsInBackground(getActivity(),
                         permissions = Arrays.asList("public_profile", "email"),
                         new LogInCallback() {
@@ -139,17 +159,16 @@ public class LoginFragment extends Fragment {
                             public void done(ParseUser user, ParseException err) {
                                 Log.d("loginFB", "Testing FB login");
                                 if (err != null) {
-                                    Log.d("loginFB","This is an error: "+ err.toString());
+                                    Log.d("loginFB", "This is an error: " + err.toString());
                                 }
                                 if (user == null) {
                                     Log.d("loginFB", "Uh oh. The user cancelled the Facebook login.");
                                 } else if (user.isNew()) {
-                                    Log.d("loginFB", "User signed up and logged in through Facebook!"+ParseUser.getCurrentUser());
-
-//                                    saveUserDetails();
+                                    Log.d("loginFB", "User signed up and logged in through Facebook!" + ParseUser.getCurrentUser());
+                                    fbLoadUserDetails();
                                 } else {
-                                    Log.d("loginFB", "User logged in through Facebook!" +ParseUser.getCurrentUser());
-                                    Intent i = new Intent(getActivity(),HomeActivity.class);
+                                    Log.d("loginFB", "User logged in through Facebook!" + ParseUser.getCurrentUser());
+                                    Intent i = new Intent(getActivity(), HomeActivity.class);
                                     startActivity(i);
 //                                    saveUserDetails();
                                 }
@@ -203,23 +222,69 @@ public class LoginFragment extends Fragment {
         if (username.trim().equals("") || password.trim().equals("")) {
             Toast.makeText(getActivity(), "Enter the User Credentials", Toast.LENGTH_SHORT).show();
             return false;
-//            TODO: ADD else if to check for email
+        } else if (username.contains(" ")) {
+            Toast.makeText(getActivity(), "Invalid Username", Toast.LENGTH_SHORT).show();
+            return false;
+
         } else {
             return true;
         }
     }
 
     /**
-     * Facebook Authentication On Activity Result
-     *
-     * @param requestCode
-     * @param resultCode
-     * @param data
+     * TODO Getting FB Online :)
      */
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-////        Log.d("loginFBOnAct","Code reaches here");
-////        ParseFacebookUtils.onActivityResult(requestCode, resultCode, data);
-//    }
+    private void fbLoadUserDetails() {
+        Log.d("loginfbsave", "inside user det");
+        Profile profile = Profile.getCurrentProfile();
+        if (profile != null) {
+            Log.d("loginfbsave", "Accessing from id: " + profile.getFirstName());
+        } else {
+            return;
+        }
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "id,name,email");
+
+        new GraphRequest(
+                AccessToken.getCurrentAccessToken(),
+                "/me",
+                parameters,
+                HttpMethod.GET,
+                new GraphRequest.Callback() {
+                    @Override
+                    public void onCompleted(GraphResponse graphResponse) {
+                        Log.d("loginfbsave", "saving to parse with details");
+
+                        try {
+                            String[] test = {};
+                            name = graphResponse.getJSONObject().getString("name");
+                            user.setName(name);
+                            email = graphResponse.getJSONObject().getString("email");
+                            user.setEmail(email);
+                            Log.d("loginfbsave", "user--" + user.toString() + "--email--" + email.toString());
+                            /**
+                             * Saving to Parse
+                             */
+                            Log.d("loginFBload", "updating parse site with details");
+                            parseUser = ParseUser.getCurrentUser();
+                            parseUser.put("name", name);
+                            parseUser.setUsername(email.split("@")[0]); //Takes the deepakrohan from deepakrohan@facebook.com
+                            parseUser.setEmail(email);
+
+                            parseUser.saveInBackground(new SaveCallback() {
+                                @Override
+                                public void done(ParseException e) {
+                                    if (e != null) {
+                                        Log.d("loginFBErr", "Storing Parse error: " + e.toString());
+                                    } else {
+                                        Toast.makeText(getActivity(), "name:" + name + " email: " + email, Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                        } catch (JSONException e) {
+                            Log.d("loginfbsaveErr", e.toString());
+                        }
+                    }
+                }).executeAsync();
+    }
 }
