@@ -102,7 +102,19 @@ public class LoginFragment extends Fragment {
 
                 if (isValidCreds(username, password)) ;
                 {
-                    //TODO: Authenticate users
+                    ParseUser.logInInBackground(editTextUsername.getText().toString(), editTextPassword.getText().toString(),
+                            new LogInCallback() {
+                                @Override
+                                public void done(ParseUser user, ParseException e) {
+                                    if (user != null) {
+                                        Log.d("as", "User Foud: " + user.getUsername());
+                                        Intent i = new Intent(getActivity(), HomeActivity.class);
+                                        startActivity(i);
+                                    } else {
+                                        Toast.makeText(getActivity().getApplicationContext(), "Invalid Creds", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
                 }
             }
         });
