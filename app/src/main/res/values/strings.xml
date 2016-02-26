@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PhotoLib</string>
+    <string name="app_name">Book Face</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -27,4 +27,56 @@
     <string name="ok_button">OK</string>
     <string name="cancel_button">Cancel</string>
     <string name="title_activity_home">HomeActivity</string>
+    <string name="editButton">Edit/Create Profile Page</string>
+    <string name="buttonViewProfiles">Browse Profiles</string>
+    <string name="buttonMessages">Messages</string>
+    <string name="buttonAlbums">Browse Albums</string>
+
+    <!-- Justin's Strings -->
+    <string name="title_activity_user_listing">UserListing</string>
+    <string name="buttonEdit">Edit Profile</string>
+    <string name="title_activity_profile_edit">ProfileEdit</string>
+    <string name="title_activity_message_inbox">MessageInbox</string>
+    <string name="title_activity_message_detail">MessageDetail</string>
+    <string name="butDelete">Delete</string>
+    <string name="butReply">Reply</string>
+    <string name="title_activity_compose_message">ComposeMessage</string>
+    <string name="composeFrom">FROM:</string>
+    <string name="composeTo">TO:</string>
+    <string name="composeSubject">SUBJECT:</string>
+    <string name="composeMessage">MESSAGE:</string>
+    <string name="composeSend">Send</string>
+    <string name="composeImage">Add Image</string>
+    <string name="editName">Name:</string>
+    <string name="editGender">Gender:</string>
+    <string name="buttonEditSave">Save Profile</string>
+    <string name="switchEditGender">Female/Male</string>
+    <string name="buttonEditImage">Add/change image</string>
+    <string name="title_activity_create_album">CreateAlbum</string>
+    <string name="albumTitlePrompt">Album Title</string>
+    <string name="privacyPrompt">Privacy</string>
+    <string name="switchEditPrivacy">Private/Public</string>
+    <string name="buttonAddAlbumImageText">Add Album Image</string>
+    <string name="buttonSaveAlbum">Save Album</string>
+    <string name="title_activity_view_albums">ViewAlbums</string>
+    <string name="editAlbumButton">Edit/Create Album</string>
+    <string name="title_activity_album_detail_view">AlbumDetailView</string>
+    <string name="addUserButton">Add User</string>
+    <string name="addPhotoButton">Add Photo</string>
+    <string name="deleteAlbumButton">Delete Album</string>
+    <string name="deleteButton">Delete</string>
+    <string name="albumSavePrompt">Save Album</string>
+    <string name="title_activity_select_added_users">SelectAddedUsers</string>
+    <string name="title_activity_basic_view_photos">BasicViewPhotos</string>
+    <string name="buttonCreateAlbum">Create New Album</string>
+    <string name="pushPrompt">Receive push notifications?</string>
+    <string name="yesNo">Yes/No</string>
+    <string name="deleteClickPrompt">Long click to delete</string>
+    <string name="saveShort">Save</string>
+    <string name="pendingPrompt">Pending</string>
+    <string name="title_activity_single_image_view">SingleImageView</string>
+    <string name="title_activity_approve_photos">ApprovePhotos</string>
+    <string name="approvalPrompt">Tap to approve photo, long press to delete</string>
+    <string name="buttonToList">TO:</string>
+    <string name="noYes">No/Yes</string>
 </resources>

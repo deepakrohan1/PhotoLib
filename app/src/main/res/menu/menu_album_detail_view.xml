@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+tools:context="com.example.rohan.photolib.AlbumDetailView">
+<item android:id="@+id/action_photos" android:title="Photos"
+    android:orderInCategory="100" app:showAsAction="always" />
+
+<item android:id="@+id/action_users" android:title="Users"
+    android:orderInCategory="100" app:showAsAction="always" />
+</menu>

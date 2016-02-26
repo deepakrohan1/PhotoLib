@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <permission
         android:name="com.example.rohan.photolib.permission.C2D_MESSAGE"
@@ -44,6 +45,33 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Justin's Activities -->
+        <activity
+            android:name=".UserListing"
+            android:label="@string/title_activity_user_listing" >
+        </activity>
+        <activity
+            android:name=".ProfileDetail"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".ProfileEdit"
+            android:label="@string/title_activity_profile_edit" >
+        </activity>
+        <activity
+            android:name=".MessageInbox"
+            android:label="@string/title_activity_message_inbox" >
+        </activity>
+        <activity
+            android:name=".MessageDetail"
+            android:label="@string/title_activity_message_detail" >
+        </activity>
+        <activity
+            android:name=".ComposeMessage"
+            android:label="@string/title_activity_compose_message" >
+        </activity>
+
         <!-- Push Notifications Enable from Parse.com -->
         <service android:name="com.parse.PushService" />
 
@@ -63,7 +91,7 @@
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
 
-<!--                   IMPORTANT: Change "com.parse.starter" to match your app's package name. -->
+                <!-- IMPORTANT: Change "com.parse.starter" to match your app's package name. -->
                 <category android:name="com.example.rohan.photolib" />
             </intent-filter>
         </receiver>
@@ -74,7 +102,35 @@
 
         <activity
             android:name=".HomeActivity"
-            android:label="@string/title_activity_home" >
+            android:label="BookFace" >
+        </activity>
+        <activity
+            android:name=".CreateAlbum"
+            android:label="@string/title_activity_create_album" >
+        </activity>
+        <activity
+            android:name=".ViewAlbums"
+            android:label="" >
+        </activity>
+        <activity
+            android:name=".AlbumDetailView"
+            android:label="@string/title_activity_album_detail_view" >
+        </activity>
+        <activity
+            android:name=".SelectAddedUsers"
+            android:label="@string/title_activity_select_added_users" >
+        </activity>
+        <activity
+            android:name=".BasicViewPhotos"
+            android:label="@string/title_activity_basic_view_photos" >
+        </activity>
+        <activity
+            android:name=".SingleImageView"
+            android:label="@string/title_activity_single_image_view" >
+        </activity>
+        <activity
+            android:name=".ApprovePhotos"
+            android:label="@string/title_activity_approve_photos" >
         </activity>
     </application>
 

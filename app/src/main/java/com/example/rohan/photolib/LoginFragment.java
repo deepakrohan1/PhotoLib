@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.text.method.HideReturnsTransformationMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,8 +20,10 @@ import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 import com.facebook.Profile;
 import com.parse.LogInCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
+import com.parse.ParseInstallation;
 import com.parse.ParseTwitterUtils;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -91,10 +94,18 @@ public class LoginFragment extends Fragment {
         intializeUI();
 //        pattern = Pattern.compile(SignupFragment.EMAIL_PATTERN);
 
-        ParseUser.logOut(); //TODo remvove this at the end
+        if(ParseUser.getCurrentUser() != null){
+            Intent i = new Intent(getActivity(), HomeActivity.class);
+            startActivity(i);
+        }
+
+
+//        ParseUser.logOut(); //TODo remvove this at the end
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
 
                 username = editTextUsername.getText().toString();
                 password = editTextPassword.getText().toString();
@@ -108,6 +119,11 @@ public class LoginFragment extends Fragment {
                                 public void done(ParseUser user, ParseException e) {
                                     if (user != null) {
                                         Log.d("as", "User Foud: " + user.getUsername());
+
+                                        ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+                                        installation.put("username", ParseUser.getCurrentUser().getUsername());
+                                        installation.saveInBackground();
+
                                         Intent i = new Intent(getActivity(), HomeActivity.class);
                                         startActivity(i);
                                     } else {
@@ -116,6 +132,7 @@ public class LoginFragment extends Fragment {
                                 }
                             });
                 }
+
             }
         });
 
@@ -142,11 +159,29 @@ public class LoginFragment extends Fragment {
                             Log.d("loginTw", "Uh oh. The user cancelled the Twitter login.");
                         } else if (user.isNew()) {
                             Log.d("loginTw", "User signed up and logged in through Twitter!");
+                            getTwitterUsername();
+                            ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+                            installation.put("username", ParseUser.getCurrentUser().getUsername());
+//                            installation.put("privacy","no");
+
+                            installation.saveInBackground();
 //                    Log.d("loginTw", ParseTwitterUtils.getTwitter().getScreenName().toString());
+                            Intent i = new Intent(getActivity(), HomeActivity.class);
+                            startActivity(i);
 
                         } else {
                             Log.d("loginTw", "User logged in through Twitter!");
+//                            getTwitterUsername();
                             Log.d("loginTw", ParseTwitterUtils.getTwitter().getScreenName().toString());
+
+                            Intent i = new Intent(getActivity(), HomeActivity.class);
+                            startActivity(i);
+
+                            ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+                            installation.put("username", ParseUser.getCurrentUser().getUsername());
+
+
+                            installation.saveInBackground();
 
                         }
                     }
@@ -178,8 +213,16 @@ public class LoginFragment extends Fragment {
                                 } else if (user.isNew()) {
                                     Log.d("loginFB", "User signed up and logged in through Facebook!" + ParseUser.getCurrentUser());
                                     fbLoadUserDetails();
+
+
                                 } else {
                                     Log.d("loginFB", "User logged in through Facebook!" + ParseUser.getCurrentUser());
+
+                                    ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+
+                                    installation.put("username", ParseUser.getCurrentUser().getUsername());
+                                    installation.saveInBackground();
+
                                     Intent i = new Intent(getActivity(), HomeActivity.class);
                                     startActivity(i);
 //                                    saveUserDetails();
@@ -290,6 +333,10 @@ public class LoginFragment extends Fragment {
                                         Log.d("loginFBErr", "Storing Parse error: " + e.toString());
                                     } else {
                                         Toast.makeText(getActivity(), "name:" + name + " email: " + email, Toast.LENGTH_SHORT).show();
+                                        ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+//                                        installation.put("privacy","no");
+                                        installation.put("username", ParseUser.getCurrentUser().getUsername());
+                                        installation.saveInBackground();
                                     }
                                 }
                             });
@@ -299,4 +346,31 @@ public class LoginFragment extends Fragment {
                     }
                 }).executeAsync();
     }
+    /**
+     * Twitter get username
+     * TODO Add this piece of code
+     */
+    public void getTwitterUsername(){
+        Log.d("loginTwitterUser", "Trying to update the twitter username");
+        ParseUser tuser = ParseUser.getCurrentUser();
+        tuser.setUsername("t" + ParseTwitterUtils.getTwitter().getScreenName().toString());
+        tuser.put("name",ParseTwitterUtils.getTwitter().getScreenName().toString());
+        tuser.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if( e== null){
+                    Log.d("loginTwitterUser", "User is stored");
+                    ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+                    installation.put("username", ParseUser.getCurrentUser().getUsername());
+//                    installation.put("privacy","no");
+
+                    installation.saveInBackground();
+                }else {
+                    Log.d("loginTwitterUser","Failed");
+                }
+            }
+        });
+    }
 }
+
+

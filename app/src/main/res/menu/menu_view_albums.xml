@@ -1,0 +1,14 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.rohan.photolib.ViewAlbums">
+
+    <item android:id="@+id/action_all" android:title="All Albums"
+        android:orderInCategory="100" app:showAsAction="always" />
+
+    <item android:id="@+id/action_mine" android:title="My Albums"
+        android:orderInCategory="100" app:showAsAction="always" />
+
+    <item android:id="@+id/action_shared" android:title="Shared with Me"
+        android:orderInCategory="100" app:showAsAction="always" />
+</menu>

@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseInstallation;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
@@ -116,6 +117,10 @@ public class SignupFragment extends Fragment {
                                         public void done(ParseException e) {
                                             if (e == null) {
                                                 Toast.makeText(getActivity(), "New user has been created", Toast.LENGTH_SHORT).show();
+                                                ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+                                                installation.put("username", ParseUser.getCurrentUser().getUsername());
+//                                                installation.put("privacy","no");
+                                                installation.saveInBackground();
                                                 mListener.onCancelButton();
                                             } else {
                                                 Log.d("signupErr", "Err Signnup Act: " + e.toString());
@@ -192,3 +197,5 @@ public class SignupFragment extends Fragment {
 
 
 }
+
+
